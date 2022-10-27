@@ -10,6 +10,8 @@ from utils.Database import Database
 # Import Image
 from utils.Image import Image
 
+from utils.Scraper import Scraper
+
 try :
     recherche = str(sys.argv[1])
 except:
@@ -35,6 +37,9 @@ db.connectDb()
 db.createTable()
 db.truncateTable()
 
+# On initialise scraper
+scraper = Scraper()
+
 # Boucle pour récupérer les actualités
 def collect_google_actu(page):
     data=[]
@@ -45,7 +50,7 @@ def collect_google_actu(page):
                 data = json.load(f)
         except:
             pass
-        
+
         if(page > 1):
             driver.find_elements(By.CLASS_NAME, 'fl')[page-2].click()
 
@@ -54,49 +59,18 @@ def collect_google_actu(page):
 
         # Boucle pour récupérer les actualités
         for article in articles:
-            try:
-                nomSource = article.find_element(By.CLASS_NAME, 'CEMjEf.NUnG9d').text
-            except:
-                nomSource = None
-            try:
-                titre = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text
-            except:
-                titre = None
-            try:
-                decription = article.find_element(By.CLASS_NAME, 'GI74Re.jBgGLd.OSrXXb').text
-            except:
-                decription = None
-            try:
-                image = article.find_element(By.TAG_NAME, 'img').get_attribute('src')
-            except:
-                image = None
-            try:
-                date = article.find_element(By.CLASS_NAME, 'OSrXXb.ZE0LJd.YsWzw').text
-            except:
-                date = None
-            try:
-                lien = article.find_element(By.CLASS_NAME, 'WlydOe').get_attribute('href')
-            except:
-                lien = None
-
+            dataFormated  = scraper.getData(article)
             # On ajoute l'image dans la base de données avec un lien temporaire
             db.addImage('inprogress')
             # On récupère l'id de l'image
             idImage = db.findImage('inprogress')['id']
             # On télécharge l'image en la sauvegardant avec son id
-            Image.saveImage(image, idImage)
+            Image.saveImage(dataFormated["image"], idImage)
 
             # On met à jour le lien de l'image dans la base de données
             db.updateImage(idImage, 'images/' + str(idImage) + '.png')
 
-            dataFormated = {
-                'nomSource' : nomSource,
-                'titre' : titre,
-                'description' : decription,
-                'image' : idImage,
-                'date' : date,
-                'lien' : lien,
-            }
+            dataFormated["image"] = idImage
 
             # On ajoute l'article dans la base de données
             db.addArticle(dataFormated)
