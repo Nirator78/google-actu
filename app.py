@@ -95,3 +95,6 @@ def collect_google_actu(page):
     driver.close()
 
 collect_google_actu(pages)
+
+# Liste compréhension pour voir sion a compris la compréhension
+print([f'{i}' for i in range(10)])
