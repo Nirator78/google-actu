@@ -4,6 +4,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 # Import Json
 import json
+# Import Database
+from utils.Database import Database
+# Import Image
+from utils.Image import Image
 
 # Import file chrome driver
 # Ouverture du navigateur Chrome avec le driver 
@@ -14,7 +18,12 @@ driver.get(BASE_URL)
 # Récupération du bouton accepter les cookies
 cookieBtn = driver.find_element(By.XPATH , '/html/body/c-wiz/div/div/div/div[2]/div[1]/div[3]/div[1]/div[1]/form[2]/div/div/button/span')
 # Clic sur le bouton accepter les cookies
-cookieBtn.click()
+cookieBtn.click() 
+
+# On initialise la base de données
+db = Database()
+db.connectDb()
+db.createTable()
 
 # Boucle pour récupérer les actualités
 def collect_google_actu():
@@ -54,11 +63,33 @@ def collect_google_actu():
             lien = articles[i].find_element(By.XPATH, '/html/body/div[7]/div/div[10]/div/div[2]/div[2]/div/div/div/div/div[1]/div/div/a').get_attribute('href')
         except:
             lien = None
+
+        # On ajoute l'image dans la base de données avec un lien temporaire
+        db.addImage('inprogress')
+        # On récupère l'id de l'image
+        idImage = db.findImage('inprogress')
+        # On télécharge l'image en la sauvegardant avec son id
+        Image.saveImage(image, idImage[0])
+
+        # On met à jour le lien de l'image dans la base de données
+        db.updateImage(idImage[0], 'image/' + str(idImage[0]) + '.png')
+
+        # On ajoute l'article dans la base de données
+        db.addArticle({
+            'nomSource' : nomSource,
+            'titre' : titre,
+            'description' : decription,
+            'image' : idImage[0],
+            'date' : date,
+            'lien' : lien,
+        })
+
+        # On ajoute l'article dans le fichier json
         data.append({
             'nomSource': nomSource, 
             'titre': titre, 
             'decription': decription, 
-            'image': image,
+            'image': idImage[0],
             'date': date,
             'lien': lien
         })
@@ -66,6 +97,11 @@ def collect_google_actu():
     # Ecriture dans le fichier json
     with open('google_actualite.json', 'w') as outfile:
         json.dump(data, outfile, indent=4)
+
+    # Fermeture de la connexion à la base de données
+    db.close()
+    
+    # Fermeture du navigateur
     driver.close()
 
 collect_google_actu()
