@@ -72,7 +72,7 @@ def collect_google_actu():
         Image.saveImage(image, idImage[0])
 
         # On met à jour le lien de l'image dans la base de données
-        db.updateImage(idImage[0], 'image/' + str(idImage[0]) + '.png')
+        db.updateImage(idImage[0], 'images/' + str(idImage[0]) + '.png')
 
         # On ajoute l'article dans la base de données
         db.addArticle({
