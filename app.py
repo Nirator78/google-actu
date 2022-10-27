@@ -14,6 +14,7 @@ from utils.Json import Json
 # Import Scraper
 from utils.Scraper import Scraper
 
+# On initialise la gestion d'argument
 argument = Argument(sys.argv)
 # On défini notre argument recherche
 recherche = argument.recherche()
@@ -41,7 +42,7 @@ db.truncateTable()
 # On initialise scraper
 scraper = Scraper()
 
-#On initialise le fichier json
+# On initialise le fichier json
 json = Json('google_actualite.json')
 # On vide le fichier json
 json.cleanJson()
