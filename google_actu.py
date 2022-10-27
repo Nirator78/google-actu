@@ -82,25 +82,6 @@ def collect_google_actu(page):
             # On ajoute l'image dans la base de données avec un lien temporaire
             db.addImage('inprogress')
             # On récupère l'id de l'image
-            idImage = db.findImage('inprogress')
-            # On télécharge l'image en la sauvegardant avec son id
-            Image.saveImage(image, idImage[0])
-
-            # On met à jour le lien de l'image dans la base de données
-            db.updateImage(idImage[0], 'images/' + str(idImage[0]) + '.png')
-
-            dataFormated = {
-                'nomSource' : nomSource,
-                'titre' : titre,
-                'description' : decription,
-                'image' : idImage[0],
-                'date' : date,
-                'lien' : lien,
-            }
-
-            # On ajoute l'image dans la base de données avec un lien temporaire
-            db.addImage('inprogress')
-            # On récupère l'id de l'image
             idImage = db.findImage('inprogress')['id']
             # On télécharge l'image en la sauvegardant avec son id
             Image.saveImage(image, idImage)
