@@ -8,7 +8,7 @@ class Database:
             password="Azerty94",
             database='webscraping'
         )
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(dictionary=True)
 
     def connectDb(self):
         self.cursor.execute("CREATE DATABASE IF NOT EXISTS webscraping")
@@ -42,6 +42,10 @@ class Database:
         sql = "SELECT * FROM article_google LEFT JOIN image_google ON article_google.image = image_google.id"
         self.cursor.execute(sql)
         return self.cursor.fetchall()
+
+    def truncateTable(self):
+        self.cursor.execute("TRUNCATE TABLE article_google")
+        self.cursor.execute("TRUNCATE TABLE image_google")
 
     def close(self):
         self.connection.close()

@@ -1,7 +1,6 @@
 # Import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 # Import Json
 import json
 # Import sys
@@ -34,21 +33,16 @@ cookieBtn.click()
 db = Database()
 db.connectDb()
 db.createTable()
+db.truncateTable()
 
 # Boucle pour récupérer les actualités
 def collect_google_actu(page):
     data=[]
     for page in range(1, page+1):
         # Verification de la présence du fichier json
-        try:
-            with open('google_actualite.json') as f:
-                data = json.load(f)
-        except:
-            pass
-
         if(page > 1):
             driver.find_elements(By.CLASS_NAME, 'fl')[page-2].click()
-            # wait
+
         # Récupération des actualités
         articles = driver.find_elements(By.CLASS_NAME, 'SoaBEf')
 
@@ -98,15 +92,34 @@ def collect_google_actu(page):
                 'lien' : lien,
             }
 
+            # On ajoute l'image dans la base de données avec un lien temporaire
+            db.addImage('inprogress')
+            # On récupère l'id de l'image
+            idImage = db.findImage('inprogress')['id']
+            # On télécharge l'image en la sauvegardant avec son id
+            Image.saveImage(image, idImage)
+
+            # On met à jour le lien de l'image dans la base de données
+            db.updateImage(idImage, 'images/' + str(idImage) + '.png')
+
+            dataFormated = {
+                'nomSource' : nomSource,
+                'titre' : titre,
+                'description' : decription,
+                'image' : idImage,
+                'date' : date,
+                'lien' : lien,
+            }
+
             # On ajoute l'article dans la base de données
             db.addArticle(dataFormated)
 
             # On ajoute l'article dans le fichier json
             data.append(dataFormated)
 
-        # Ecriture dans le fichier json
-        with open('google_actualite.json', 'w') as outfile:
-            json.dump(data, outfile, indent=4)
+            # Ecriture dans le fichier json
+            with open('google_actualite.json', 'w') as outfile:
+                json.dump(data, outfile, indent=4)
 
     # Fermeture de la connexion à la base de données
     db.close()
