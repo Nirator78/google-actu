@@ -16,6 +16,6 @@ class Argument:
     # Renvoie du nombre de page a scrapper, si aucun argument n'est passé, on renvoie 1 page
     def nombrePage(self):
         try:
-            return self.argv[2]
+            return int(self.argv[2])
         except:
             return 3
