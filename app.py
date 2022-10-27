@@ -23,7 +23,11 @@ pages = argument.nombrePage()
 
 # Ouverture du navigateur Chrome avec le driver 
 BASE_URL = f'https://www.google.com/search?q={recherche}&tbm=nws'
-driver = webdriver.Firefox()
+try: 
+    driver = webdriver.Firefox()
+except:
+    driver = webdriver.Chrome()
+    
 driver.get(BASE_URL)
 
 # Récupération du bouton accepter les cookies
