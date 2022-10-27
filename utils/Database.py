@@ -17,7 +17,7 @@ class Database:
 
     # Creation de la table si elle n'existe pas
     def createTable(self):
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS `webscraping`.`article_google` (`id` INT NOT NULL AUTO_INCREMENT,`nomSource` VARCHAR(45) NULL, `titre` VARCHAR(255) NULL, `description` TEXT(1000) NULL, `image` INT NULL, `date` VARCHAR(45) NULL, `lien` VARCHAR(255) NULL, PRIMARY KEY (`id`));")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS `webscraping`.`article_google` (`id` INT NOT NULL AUTO_INCREMENT,`nomSource` VARCHAR(45) NULL, `titre` VARCHAR(255) NULL, `description` TEXT(1000) NULL, `image` INT NULL, `date` VARCHAR(45) NULL, `lien` TEXT(1000) NULL, PRIMARY KEY (`id`));")
         self.cursor.execute("CREATE TABLE IF NOT EXISTS `webscraping`.`image_google` ( `id` INT NOT NULL AUTO_INCREMENT, `link` VARCHAR(255) NULL, PRIMARY KEY (`id`));")
 
     # Ajout d'un article dans la base de données
