@@ -1,7 +1,11 @@
 
 from selenium.webdriver.common.by import By
 
+"""
+Class Scrapper permettant de scrapper les informations
+"""
 class Scraper :
+    # On passe un objet retourner par le driver pour récuperer les informations qui nous intéresse
     def getData(self, article):
         item = {}
         try:
