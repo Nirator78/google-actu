@@ -1,25 +1,25 @@
 # Import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-# Import Json
-import json
 # Import sys
 import sys
 # Import Database
 from utils.Database import Database
 # Import Image
 from utils.Image import Image
-
+# Import Argument
+from utils.Argument import Argument
+# Import Json
+from utils.Json import Json
+# Import Scraper
 from utils.Scraper import Scraper
 
-try :
-    recherche = str(sys.argv[1])
-except:
-    recherche = 'actualite'
-try :
-    pages = int(sys.argv[2])
-except:
-    pages = 1
+argument = Argument(sys.argv)
+# On défini notre argument recherche
+recherche = argument.recherche()
+# On défini notre argument page
+pages = argument.nombrePage()
+
 
 # Ouverture du navigateur Chrome avec le driver 
 BASE_URL = f'https://www.google.com/search?q={recherche}&tbm=nws'
@@ -35,21 +35,23 @@ cookieBtn.click()
 db = Database()
 db.connectDb()
 db.createTable()
+# On supprime les données de la base de données
 db.truncateTable()
 
 # On initialise scraper
 scraper = Scraper()
+
+#On initialise le fichier json
+json = Json('google_actualite.json')
+# On vide le fichier json
+json.cleanJson()
 
 # Boucle pour récupérer les actualités
 def collect_google_actu(page):
     data=[]
     for page in range(1, page+1):
         # Verification de la présence du fichier json
-        try:
-            with open('google_actualite.json') as f:
-                data = json.load(f)
-        except:
-            pass
+        data = json.getJson()
 
         if(page > 1):
             driver.find_elements(By.CLASS_NAME, 'fl')[page-2].click()
@@ -78,9 +80,8 @@ def collect_google_actu(page):
             # On ajoute l'article dans le fichier json
             data.append(dataFormated)
 
-            # Ecriture dans le fichier json
-            with open('google_actualite.json', 'w') as outfile:
-                json.dump(data, outfile, indent=4)
+        # Ecriture dans le fichier json
+        json.setJson(data)
 
     # Fermeture de la connexion à la base de données
     db.close()

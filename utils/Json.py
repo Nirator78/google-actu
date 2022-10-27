@@ -18,3 +18,6 @@ class Json:
                 json.dump(data, jsonFile, indent=4)
         except:
             print("Erreur lors de l'écriture dans le fichier " + self.jsonName)
+
+    def cleanJson(self):
+        self.setJson([])
