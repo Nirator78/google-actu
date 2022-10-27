@@ -74,25 +74,20 @@ def collect_google_actu():
         # On met à jour le lien de l'image dans la base de données
         db.updateImage(idImage[0], 'images/' + str(idImage[0]) + '.png')
 
-        # On ajoute l'article dans la base de données
-        db.addArticle({
+        dataFormated = {
             'nomSource' : nomSource,
             'titre' : titre,
             'description' : decription,
             'image' : idImage[0],
             'date' : date,
             'lien' : lien,
-        })
+        }
+
+        # On ajoute l'article dans la base de données
+        db.addArticle(dataFormated)
 
         # On ajoute l'article dans le fichier json
-        data.append({
-            'nomSource': nomSource, 
-            'titre': titre, 
-            'decription': decription, 
-            'image': idImage[0],
-            'date': date,
-            'lien': lien
-        })
+        data.append(dataFormated)
 
     # Ecriture dans le fichier json
     with open('google_actualite.json', 'w') as outfile:
