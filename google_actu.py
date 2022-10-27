@@ -9,15 +9,14 @@ import sys
 from utils.Database import Database
 # Import Image
 from utils.Image import Image
+# Import Argument
+from utils.Argument import Argument
 
-try :
-    recherche = str(sys.argv[1])
-except:
-    recherche = 'actualite'
-try :
-    pages = int(sys.argv[2])
-except:
-    pages = 1
+argument = Argument(sys.argv)
+# On défini notre argument recherche
+recherche = argument.recherche()
+# On défini notre argument page
+pages = argument.nombrePage()
 
 # Ouverture du navigateur Chrome avec le driver 
 BASE_URL = f'https://www.google.com/search?q={recherche}&tbm=nws'
