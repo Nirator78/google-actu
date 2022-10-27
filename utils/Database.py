@@ -38,5 +38,10 @@ class Database:
         self.cursor.execute(sql)
         return self.cursor.fetchone()
 
+    def listArticleJoinImage(self):
+        sql = "SELECT * FROM article_google LEFT JOIN image_google ON article_google.image = image_google.id"
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
+
     def close(self):
         self.connection.close()
