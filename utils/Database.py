@@ -43,5 +43,9 @@ class Database:
         self.cursor.execute(sql)
         return self.cursor.fetchall()
 
+    def truncateTable(self):
+        self.cursor.execute("TRUNCATE TABLE article_google")
+        self.cursor.execute("TRUNCATE TABLE image_google")
+
     def close(self):
         self.connection.close()

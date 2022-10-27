@@ -35,6 +35,7 @@ cookieBtn.click()
 db = Database()
 db.connectDb()
 db.createTable()
+db.truncateTable()
 
 # Boucle pour récupérer les actualités
 def collect_google_actu():
