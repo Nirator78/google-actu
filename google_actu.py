@@ -10,19 +10,17 @@ from utils.Database import Database
 # Import Image
 from utils.Image import Image
 
-# Verification numero de page
-def verif_page(page):
-    # si page 1 on met 0
-    if page == 1:
-        return str(page-1)
-    # si page 1 on met 0
-    else:
-        return str(page-1)+'0'
-    
-page = verif_page(int(sys.argv[2]))
+try :
+    recherche = str(sys.argv[1])
+except:
+    recherche = 'actualite'
+try :
+    pages = int(sys.argv[2])
+except:
+    pages = 1
 
 # Ouverture du navigateur Chrome avec le driver 
-BASE_URL = f'https://www.google.com/search?q={str(sys.argv[1])}&tbm=nws&start={page}'
+BASE_URL = f'https://www.google.com/search?q={recherche}&tbm=nws'
 driver = webdriver.Firefox()
 driver.get(BASE_URL)
 
@@ -38,71 +36,96 @@ db.createTable()
 db.truncateTable()
 
 # Boucle pour récupérer les actualités
-def collect_google_actu():
+def collect_google_actu(page):
     data=[]
-    # Verification de la présence du fichier json
-    try:
-        with open('google_actualite.json') as f:
-            data = json.load(f)
-    except:
-        pass
-    # Récupération des actualités
-    articles = driver.find_elements(By.CLASS_NAME, 'vJOb1e.aIfcHf.Hw13jc')
-    # Boucle pour récupérer les actualités
-    for article in articles:
+    for page in range(1, page+1):
+        # Verification de la présence du fichier json
         try:
-            nomSource = article.find_element(By.CLASS_NAME, 'CEMjEf.NUnG9d').text
+            with open('google_actualite.json') as f:
+                data = json.load(f)
         except:
-            nomSource = None
-        try:
-            titre = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text
-        except:
-            titre = None
-        try:
-            decription = article.find_element(By.CLASS_NAME, 'GI74Re.nDgy9d').text
-        except:
-            decription = None
-        try:
-            image = article.find_element(By.TAG_NAME, 'img').get_attribute('src')
-        except:
-            image = None
-        try:
-            date = article.find_element(By.CLASS_NAME, 'OSrXXb.ZE0LJd.YsWzw').text
-        except:
-            date = None
-        try:
-            lien = article.find_element(By.CSS_SELECTOR, 'a.WlydOe').get_attribute('href')
-        except:
-            lien = None
+            pass
+        
+        if(page > 1):
+            driver.find_elements(By.CLASS_NAME, 'fl')[page-2].click()
 
-        # On ajoute l'image dans la base de données avec un lien temporaire
-        db.addImage('inprogress')
-        # On récupère l'id de l'image
-        idImage = db.findImage('inprogress')['id']
-        # On télécharge l'image en la sauvegardant avec son id
-        Image.saveImage(image, idImage)
+        # Récupération des actualités
+        articles = driver.find_elements(By.CLASS_NAME, 'SoaBEf')
 
-        # On met à jour le lien de l'image dans la base de données
-        db.updateImage(idImage, 'images/' + str(idImage) + '.png')
+        # Boucle pour récupérer les actualités
+        for article in articles:
+            try:
+                nomSource = article.find_element(By.CLASS_NAME, 'CEMjEf.NUnG9d').text
+            except:
+                nomSource = None
+            try:
+                titre = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text
+            except:
+                titre = None
+            try:
+                decription = article.find_element(By.CLASS_NAME, 'GI74Re.jBgGLd.OSrXXb').text
+            except:
+                decription = None
+            try:
+                image = article.find_element(By.TAG_NAME, 'img').get_attribute('src')
+            except:
+                image = None
+            try:
+                date = article.find_element(By.CLASS_NAME, 'OSrXXb.ZE0LJd.YsWzw').text
+            except:
+                date = None
+            try:
+                lien = article.find_element(By.CLASS_NAME, 'WlydOe').get_attribute('href')
+            except:
+                lien = None
 
-        dataFormated = {
-            'nomSource' : nomSource,
-            'titre' : titre,
-            'description' : decription,
-            'image' : idImage,
-            'date' : date,
-            'lien' : lien,
-        }
+            # On ajoute l'image dans la base de données avec un lien temporaire
+            db.addImage('inprogress')
+            # On récupère l'id de l'image
+            idImage = db.findImage('inprogress')
+            # On télécharge l'image en la sauvegardant avec son id
+            Image.saveImage(image, idImage[0])
 
-        # On ajoute l'article dans la base de données
-        db.addArticle(dataFormated)
+            # On met à jour le lien de l'image dans la base de données
+            db.updateImage(idImage[0], 'images/' + str(idImage[0]) + '.png')
 
-        # On ajoute l'article dans le fichier json
-        data.append(dataFormated)
+            dataFormated = {
+                'nomSource' : nomSource,
+                'titre' : titre,
+                'description' : decription,
+                'image' : idImage[0],
+                'date' : date,
+                'lien' : lien,
+            }
 
-    # Ecriture dans le fichier json
-    with open('google_actualite.json', 'w') as outfile:
-        json.dump(data, outfile, indent=4)
+            # On ajoute l'image dans la base de données avec un lien temporaire
+            db.addImage('inprogress')
+            # On récupère l'id de l'image
+            idImage = db.findImage('inprogress')['id']
+            # On télécharge l'image en la sauvegardant avec son id
+            Image.saveImage(image, idImage)
+
+            # On met à jour le lien de l'image dans la base de données
+            db.updateImage(idImage, 'images/' + str(idImage) + '.png')
+
+            dataFormated = {
+                'nomSource' : nomSource,
+                'titre' : titre,
+                'description' : decription,
+                'image' : idImage,
+                'date' : date,
+                'lien' : lien,
+            }
+
+            # On ajoute l'article dans la base de données
+            db.addArticle(dataFormated)
+
+            # On ajoute l'article dans le fichier json
+            data.append(dataFormated)
+
+            # Ecriture dans le fichier json
+            with open('google_actualite.json', 'w') as outfile:
+                json.dump(data, outfile, indent=4)
 
     # Fermeture de la connexion à la base de données
     db.close()
@@ -110,4 +133,4 @@ def collect_google_actu():
     # Fermeture du navigateur
     driver.close()
 
-collect_google_actu()
+collect_google_actu(pages)
