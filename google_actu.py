@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 # Import Json
 import json
+# Import sys
+import sys
 # Import Database
 from utils.Database import Database
 # Import Image
