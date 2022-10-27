@@ -1,4 +1,12 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+# Log du driver
 geckodriver.log
+
+# Images
+*.png
+
+# Fichiers json
+*.json
