@@ -1,5 +1,4 @@
 import mysql.connector as mc
-import pandas as pd
 
 class Database:
     def __init__(self):
