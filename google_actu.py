@@ -70,25 +70,25 @@ def collect_google_actu():
         except:
             date = None
         try:
-            lien = article.find_element(By.XPATH, '/html/body/div[7]/div/div[10]/div/div[2]/div[2]/div/div/div/div/div[1]/div/div/a').get_attribute('href')
+            lien = article.find_element(By.CSS_SELECTOR, 'a.WlydOe').get_attribute('href')
         except:
             lien = None
 
         # On ajoute l'image dans la base de données avec un lien temporaire
         db.addImage('inprogress')
         # On récupère l'id de l'image
-        idImage = db.findImage('inprogress')
+        idImage = db.findImage('inprogress')['id']
         # On télécharge l'image en la sauvegardant avec son id
-        Image.saveImage(image, idImage[0])
+        Image.saveImage(image, idImage)
 
         # On met à jour le lien de l'image dans la base de données
-        db.updateImage(idImage[0], 'images/' + str(idImage[0]) + '.png')
+        db.updateImage(idImage, 'images/' + str(idImage) + '.png')
 
         dataFormated = {
             'nomSource' : nomSource,
             'titre' : titre,
             'description' : decription,
-            'image' : idImage[0],
+            'image' : idImage,
             'date' : date,
             'lien' : lien,
         }
