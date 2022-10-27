@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import mysql.connector as mc
+import pandas as pd
 
 class Database:
     def __init__(self):
@@ -18,14 +18,22 @@ class Database:
         self.cursor.execute("CREATE TABLE IF NOT EXISTS `webscraping`.`article_google` (`id` INT NOT NULL AUTO_INCREMENT,`nomSource` VARCHAR(45) NULL, `titre` VARCHAR(255) NULL, `description` TEXT(1000) NULL, `image` INT NULL, `date` VARCHAR(45) NULL, `lien` VARCHAR(255) NULL, PRIMARY KEY (`id`));")
         self.cursor.execute("CREATE TABLE IF NOT EXISTS `webscraping`.`image_google` ( `id` INT NOT NULL AUTO_INCREMENT, `link` VARCHAR(255) NULL, PRIMARY KEY (`id`));")
 
-    def addRow(self, item):
-        sql = "INSERT INTO movie (title, img, author, time, genre, score, description, releaseDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        val = (item['title'], item['img'], item['author'], item['time'], item['genre'], item['score'], item['desc'], item['release'])
+    def addArticle(self, item):
+        sql = "INSERT INTO article_google (nomSource, titre, description, image, date, lien) VALUES (%s, %s, %s, %s, %s, %s)"
+        val = (item['nomSource'], item['titre'], item['description'], item['image'], item['date'], item['lien'])
         self.cursor.execute(sql, val)
         self.connection.commit()
 
-    def addRowBoursorama(self, item):
-        sql = "INSERT INTO boursorama (indexStockExchange, stockAction, variation, vMax, vMin, vOpen, dateCollect) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        val = (item['indexStockExchange'], item['stockAction'], item['variation'], item['vMax'], item['vMin'], item['vOpen'], item['dateCollect'])
-        self.cursor.execute(sql, val)
+    def addImage(self, link):
+        sql = "INSERT INTO image_google (link) VALUES ('" + link + "')"
+        print(sql)
+        self.cursor.execute(sql)
         self.connection.commit()
+    
+    def findImage(self, link):
+        sql = "SELECT * FROM image_google WHERE link = '" + link + "' LIMIT 1"
+        self.cursor.execute(sql)
+        return self.cursor.fetchone()
+
+    def close(self):
+        self.connection.close()
