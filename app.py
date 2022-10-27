@@ -37,7 +37,7 @@ db = Database()
 db.connectDb()
 db.createTable()
 # On supprime les données de la base de données
-db.truncateTable()
+# db.truncateTable()
 
 # On initialise scraper
 scraper = Scraper()
@@ -45,7 +45,7 @@ scraper = Scraper()
 # On initialise le fichier json
 json = Json('google_actualite.json')
 # On vide le fichier json
-json.cleanJson()
+# json.cleanJson()
 
 # Boucle pour récupérer les actualités
 def collect_google_actu(page):

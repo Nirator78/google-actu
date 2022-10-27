@@ -9,7 +9,7 @@ class Scraper :
         except:
             item["nomSource"] = None
         try:
-            item["titre"] = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text
+            item["titre"] = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text.replace('"', '')
         except:
             item["titre"] = None
         try:
