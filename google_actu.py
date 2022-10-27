@@ -1,7 +1,6 @@
 # Import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 # Import Json
 import json
 # Import sys
