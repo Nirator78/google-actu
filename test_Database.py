@@ -1,3 +1,6 @@
+"""
+Test de la classe Database
+"""
 from utils.Database import Database
 
 db = Database()
