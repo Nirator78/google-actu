@@ -45,6 +45,9 @@ db.createTable()
 # On initialise scraper
 scraper = Scraper()
 
+# On initialise Image
+image = Image()
+
 # On initialise le fichier json
 json = Json('google_actualite.json')
 # On vide le fichier json
@@ -71,7 +74,7 @@ def collect_google_actu(pages):
             # On récupère l'id de l'image
             idImage = db.findImage('inprogress')['id']
             # On télécharge l'image en la sauvegardant avec son id
-            Image.saveImage(dataFormated["image"], idImage)
+            image.saveImage(dataFormated["image"], idImage)
 
             # On met à jour le lien de l'image dans la base de données
             db.updateImage(idImage, 'images/' + str(idImage) + '.png')
