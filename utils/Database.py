@@ -8,7 +8,7 @@ class Database:
             password="Azerty94",
             database='webscraping'
         )
-        self.cursor = self.connection.cursor()
+        self.cursor = self.connection.cursor(dictionary=True)
 
     def connectDb(self):
         self.cursor.execute("CREATE DATABASE IF NOT EXISTS webscraping")
