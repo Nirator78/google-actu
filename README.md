@@ -13,8 +13,7 @@
 ```
 host="localhost",
 user="root",
-password="",
-database='webscraping' # Ne pas modifier
+password=""
 ```
 ### Lancer le programme 
 Executer si on veux les valeurs par defaut

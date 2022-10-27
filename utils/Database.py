@@ -6,8 +6,7 @@ class Database:
         self.connection = mc.connect(
             host="localhost",
             user="root",
-            password="",
-            database='webscraping'
+            password=""
         )
         self.cursor = self.connection.cursor(dictionary=True)
         
