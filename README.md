@@ -29,3 +29,5 @@ Exemple
 ```
 py .\app.py crypto 5
 ```
+### Les images
+Les images sont automatiquement téléchargées dans un fichier images
