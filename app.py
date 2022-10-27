@@ -21,7 +21,6 @@ recherche = argument.recherche()
 # On défini notre argument page
 pages = argument.nombrePage()
 
-
 # Ouverture du navigateur Chrome avec le driver 
 BASE_URL = f'https://www.google.com/search?q={recherche}&tbm=nws'
 driver = webdriver.Firefox()
@@ -48,14 +47,14 @@ json = Json('google_actualite.json')
 # json.cleanJson()
 
 # Boucle pour récupérer les actualités
-def collect_google_actu(page):
+def collect_google_actu(pages):
     data=[]
-    for page in range(1, page+1):
+    for page in range(1, pages+1):
         # Verification de la présence du fichier json
         data = json.getJson()
-
+        
         if(page > 1):
-            driver.find_elements(By.CLASS_NAME, 'fl')[page-2].click()
+            driver.find_element(By.ID, 'pnnext').click()
 
         # Récupération des actualités
         articles = driver.find_elements(By.CLASS_NAME, 'SoaBEf')
@@ -93,4 +92,4 @@ def collect_google_actu(page):
 collect_google_actu(pages)
 
 # Liste compréhension pour voir sion a compris la compréhension
-print([f'{i}' for i in range(10)])
+print([f'{i}' for i in range(pages)])
