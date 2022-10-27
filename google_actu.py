@@ -32,6 +32,7 @@ cookieBtn.click()
 db = Database()
 db.connectDb()
 db.createTable()
+# On supprime les données de la base de données
 db.truncateTable()
 
 # Boucle pour récupérer les actualités
