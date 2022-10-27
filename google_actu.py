@@ -38,29 +38,29 @@ def collect_google_actu():
     articles = driver.find_elements(By.CLASS_NAME, 'vJOb1e.aIfcHf.Hw13jc')
 
     # Boucle pour récupérer les actualités
-    for i in range(len(articles)):
+    for article in articles:
         try:
-            nomSource = articles[i].find_element(By.CLASS_NAME, 'CEMjEf.NUnG9d').text
+            nomSource = article.find_element(By.CLASS_NAME, 'CEMjEf.NUnG9d').text
         except:
             nomSource = None
         try:
-            titre = articles[i].find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.nDgy9d').text
+            titre = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.nDgy9d').text
         except:
             titre = None
         try:
-            decription = articles[i].find_element(By.CLASS_NAME, 'GI74Re.nDgy9d').text
+            decription = article.find_element(By.CLASS_NAME, 'GI74Re.nDgy9d').text
         except:
             decription = None
         try:
-            image = articles[i].find_element(By.TAG_NAME, 'img').get_attribute('src')
+            image = article.find_element(By.TAG_NAME, 'img').get_attribute('src')
         except:
             image = None
         try:
-            date = articles[i].find_element(By.CLASS_NAME, 'OSrXXb.ZE0LJd.YsWzw').text
+            date = article.find_element(By.CLASS_NAME, 'OSrXXb.ZE0LJd.YsWzw').text
         except:
             date = None
         try:
-            lien = articles[i].find_element(By.XPATH, '/html/body/div[7]/div/div[10]/div/div[2]/div[2]/div/div/div/div/div[1]/div/div/a').get_attribute('href')
+            lien = article.find_element(By.XPATH, '/html/body/div[7]/div/div[10]/div/div[2]/div[2]/div/div/div/div/div[1]/div/div/a').get_attribute('href')
         except:
             lien = None
 
