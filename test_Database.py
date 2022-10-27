@@ -17,4 +17,10 @@ db.addArticle({
 
 print(db.findImage('link'))
 
+db.updateImage(1, 'link2')
+
+print(db.findImage('link2'))
+
+print(db.listArticleJoinImage())
+
 db.close()

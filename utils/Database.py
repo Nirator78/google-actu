@@ -1,5 +1,4 @@
 import mysql.connector as mc
-import pandas as pd
 
 class Database:
     def __init__(self):
@@ -26,7 +25,11 @@ class Database:
 
     def addImage(self, link):
         sql = "INSERT INTO image_google (link) VALUES ('" + link + "')"
-        print(sql)
+        self.cursor.execute(sql)
+        self.connection.commit()
+
+    def updateImage(self, id, link):
+        sql = "UPDATE image_google SET link = '" + link + "' WHERE id = " + str(id)
         self.cursor.execute(sql)
         self.connection.commit()
     
@@ -34,6 +37,11 @@ class Database:
         sql = "SELECT * FROM image_google WHERE link = '" + link + "' LIMIT 1"
         self.cursor.execute(sql)
         return self.cursor.fetchone()
+
+    def listArticleJoinImage(self):
+        sql = "SELECT * FROM article_google LEFT JOIN image_google ON article_google.image = image_google.id"
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
 
     def close(self):
         self.connection.close()
