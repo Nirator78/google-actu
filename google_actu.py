@@ -40,6 +40,12 @@ def collect_google_actu(page):
     data=[]
     for page in range(1, page+1):
         # Verification de la présence du fichier json
+        try:
+            with open('google_actualite.json') as f:
+                data = json.load(f)
+        except:
+            pass
+        
         if(page > 1):
             driver.find_elements(By.CLASS_NAME, 'fl')[page-2].click()
 
