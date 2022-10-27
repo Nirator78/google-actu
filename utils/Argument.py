@@ -12,4 +12,4 @@ class Argument:
         try:
             return self.argv[2]
         except:
-            return 1
+            return 3
