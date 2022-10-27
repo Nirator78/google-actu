@@ -1,7 +1,11 @@
 
 from selenium.webdriver.common.by import By
 
+"""
+Class Scrapper permettant de scrapper les informations
+"""
 class Scraper :
+    # On passe un objet retourner par le driver pour récuperer les informations qui nous intéresse
     def getData(self, article):
         item = {}
         try:
@@ -9,7 +13,7 @@ class Scraper :
         except:
             item["nomSource"] = None
         try:
-            item["titre"] = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text
+            item["titre"] = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text.replace('"', '')
         except:
             item["titre"] = None
         try:
