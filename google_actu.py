@@ -4,14 +4,26 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 # Import Json
 import json
+# Import sys
+import sys
 # Import Database
 from utils.Database import Database
 # Import Image
 from utils.Image import Image
 
-# Import file chrome driver
+# Verification numero de page
+def verif_page(page):
+    # si page 1 on met 0
+    if page == 1:
+        return str(page-1)
+    # si page 1 on met 0
+    else:
+        return str(page-1)+'0'
+    
+page = verif_page(int(sys.argv[2]))
+
 # Ouverture du navigateur Chrome avec le driver 
-BASE_URL = 'https://www.google.com/search?q=ACTUALITE&tbm=nws'
+BASE_URL = f'https://www.google.com/search?q={str(sys.argv[1])}&tbm=nws&start={page}'
 driver = webdriver.Firefox()
 driver.get(BASE_URL)
 
