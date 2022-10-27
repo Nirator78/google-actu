@@ -47,7 +47,6 @@ def collect_google_actu():
         pass
     # Récupération des actualités
     articles = driver.find_elements(By.CLASS_NAME, 'vJOb1e.aIfcHf.Hw13jc')
-
     # Boucle pour récupérer les actualités
     for article in articles:
         try:
@@ -55,7 +54,7 @@ def collect_google_actu():
         except:
             nomSource = None
         try:
-            titre = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.nDgy9d').text
+            titre = article.find_element(By.CLASS_NAME, 'mCBkyc.y355M.ynAwRc.MBeuO.jBgGLd.OSrXXb').text
         except:
             titre = None
         try:
