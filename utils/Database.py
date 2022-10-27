@@ -25,7 +25,11 @@ class Database:
 
     def addImage(self, link):
         sql = "INSERT INTO image_google (link) VALUES ('" + link + "')"
-        print(sql)
+        self.cursor.execute(sql)
+        self.connection.commit()
+
+    def updateImage(self, id, link):
+        sql = "UPDATE image_google SET link = '" + link + "' WHERE id = " + str(id)
         self.cursor.execute(sql)
         self.connection.commit()
     
